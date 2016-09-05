@@ -3,7 +3,9 @@
 var cli = require('commander');
 var chalk = require('chalk');
 var exec = require('child_process').exec;
-var pkg = require('./package.json')
+var pkg = require('./package.json');
+
+var speak = require('./speak.js');
 
 var list = function(directory, options) {
   var cmd = 'ls';
@@ -23,7 +25,7 @@ var list = function(directory, options) {
   };
 
   console.log(parameterizedCommand);
-  // exec(parameterizedCommand, output);
+  exec(parameterizedCommand, output);
 
 };
 
@@ -35,6 +37,13 @@ cli
   .option('-a, --all', 'List all files and folders')
   .option('-l, --long','long list format')
   .action(list);
+
+cli
+  .command('speak')
+  .description('speak the words to the user')
+  .action(function() {
+    speak();
+  });
 
 cli.parse(process.argv);
 
