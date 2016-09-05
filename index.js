@@ -29,14 +29,20 @@ var list = function(directory, options) {
 
 };
 
+var saveFilePath = '~/.keys'
+
+var storeCredentials = function(appName) {
+  if(options.userName) 
+}
+
 
 cli
   .version('0.0.1')
-  .command('list [directory]')
-  .description('List files and folders')
-  .option('-a, --all', 'List all files and folders')
-  .option('-l, --long','long list format')
-  .action(list);
+  .command('store <appName>')
+  .description('Store credentials for an application')
+  .option('-u, --userName', 'Store your username')
+  .option('-p, --password', 'Store you password')
+  .action(storeCredentials);
 
 cli
   .command('speak')
