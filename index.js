@@ -31,8 +31,10 @@ var list = function(directory, options) {
 
 var saveFilePath = '~/.keys'
 
-var storeCredentials = function(appName) {
-  if(options.userName) 
+var storeCredentials = function(appName, options) {
+  if(options.userName) console.log('user: ', options.userName);
+  if(options.password) console.log('pass: ', options.password);
+  console.log('app name: ', appName);
 }
 
 
@@ -40,8 +42,8 @@ cli
   .version('0.0.1')
   .command('store <appName>')
   .description('Store credentials for an application')
-  .option('-u, --userName', 'Store your username')
-  .option('-p, --password', 'Store you password')
+  .option('-a, --userName <userName>', 'Store your username')
+  .option('-p, --password <password>', 'Store you password')
   .action(storeCredentials);
 
 cli
