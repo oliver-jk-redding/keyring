@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var cli = require('commander');
+var keyring = require('commander');
 var chalk = require('chalk');
 var exec = require('child_process').exec;
 var pkg = require('./package.json');
@@ -32,28 +32,41 @@ var list = function(directory, options) {
 var saveFilePath = '~/.keys'
 
 var storeCredentials = function(appName, options) {
-  if(options.userName) console.log('user: ', options.userName);
-  if(options.password) console.log('pass: ', options.password);
-  console.log('app name: ', appName);
+  if(!options.userName) { 
+    console.log(chalk.red("\nerror: missing required argument 'userName'. see help below."));
+    exec('keyring store -h', function(err, out) {
+      if(err) console.log(chalk.red("exec error: ") + err);
+      if(out) console.log(out);
+    });
+    return;
+  }
+
+  var cmd = 'security add-generic-password -s ' + appName + ' -a ' + options.userName;
+  if(options.password) cmd = cmd + ' -w ' + options.password;
+
+  exec(cmd, function(err, stdout, stderr) {
+    if(err) console.log(chalk.red("exec error: ") + err);
+    if(stdout) console.log(chalk.green("Credentials saved successfully."));
+    if(stderr) console.log(chalk.red("shell error: ") + stderr);
+  });
 }
 
-
-cli
+keyring
   .version('0.0.1')
   .command('store <appName>')
-  .description('Store credentials for an application')
-  .option('-a, --userName <userName>', 'Store your username')
-  .option('-p, --password <password>', 'Store you password')
+  .description('Store credentials for an application by app name, username, and password')
+  .option('-u, --userName <userName>', 'The username for the application (required)')
+  .option('-p, --password <password>', 'The password for the user account (optional)')
   .action(storeCredentials);
 
-cli
+keyring
   .command('speak')
   .description('speak the words to the user')
   .action(function() {
     speak();
   });
 
-cli.parse(process.argv);
+keyring.parse(process.argv);
 
-if(cli.args.length === 0) cli.help();
+if(keyring.args.length === 0) keyring.help();
 
