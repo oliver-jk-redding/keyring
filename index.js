@@ -14,7 +14,7 @@ keyring
   .command('fetch <appName>', 'get credentials by appName')
   .command('delete <appName>', 'delete credentials by appName')
   .command('list', 'list appNames')
-  .command('speak', 'speak the words to the user')
+  .command('reset', 'delete all credentials and app storage')
   .parse(process.argv);
 
 if(keyring.args.length === 0) keyring.help();
@@ -29,6 +29,6 @@ var checkCommandIsValid = function(commandList) {
   printHelp();
 }
 
-checkCommandIsValid(['store', 'fetch', 'delete', 'list', 'speak']);
+checkCommandIsValid(['store', 'fetch', 'delete', 'list', 'reset']);
 
 
